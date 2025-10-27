@@ -1,0 +1,9 @@
+{
+  "name": "stat-kit",
+  "version": "1.0.0",
+  "description": "Набор базовых статистических функций: среднее, медиана, стандартное отклонение, корреляция и др.",
+  "main": "index.js",
+  "keywords": ["statistics", "math", "data", "z-score", "correlation", "mean", "median"],
+  "author": "Michael & Copilot",
+  "license": "MIT"
+}
