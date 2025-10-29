@@ -1,8 +1,9 @@
 const mean = require('./mean');
 const stddev = require('./stddev');
+const { validateTwoArrays } = require('./utils');
 
 function correlation(xArr, yArr) {
-  if (xArr.length !== yArr.length) throw new Error("Arrays must be of equal length");
+  validateTwoArrays(xArr, yArr, 'correlation');
   const xMean = mean(xArr);
   const yMean = mean(yArr);
   const xStd = stddev(xArr);

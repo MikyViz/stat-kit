@@ -3,7 +3,32 @@
   "version": "1.0.0",
   "description": "Набор базовых статистических функций: среднее, медиана, стандартное отклонение, корреляция и др.",
   "main": "index.js",
-  "keywords": ["statistics", "math", "data", "z-score", "correlation", "mean", "median"],
-  "author": "Michael & Copilot",
-  "license": "MIT"
+  "keywords": [
+    "statistics",
+    "math",
+    "data",
+    "z-score",
+    "correlation",
+    "mean",
+    "median",
+    "stddev",
+    "skewness",
+    "outliers",
+    "iqr",
+    "data-analysis",
+    "stats"
+  ],
+  "author": "Michael David Vizenovsky",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MikyViz/stat-kit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MikyViz/stat-kit/issues"
+  },
+  "homepage": "https://github.com/MikyViz/stat-kit#readme",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
 }

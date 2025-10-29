@@ -1,4 +1,7 @@
+const { validate } = require('./utils');
+
 function findOutliers(arr) {
+  validate(arr, 'findOutliers');
   if (arr.length < 4) return [];
 
   const sorted = [...arr].sort((a, b) => a - b);

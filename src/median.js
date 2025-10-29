@@ -1,5 +1,7 @@
+const { validate } = require('./utils');
+
 function median(arr) {
-  if (!arr.length) return null;
+  validate(arr, 'median');
   const sorted = [...arr].sort((a, b) => a - b);
   const mid = Math.floor(sorted.length / 2);
   return sorted.length % 2 === 0

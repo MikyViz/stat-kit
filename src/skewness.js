@@ -1,9 +1,13 @@
 const mean = require('./mean');
 const stddev = require('./stddev');
+const { validate } = require('./utils');
 
 function skewness(arr) {
+  validate(arr, 'skewness');
   const n = arr.length;
-  if (n < 3) return null;
+  if (n < 3) {
+    throw new Error('skewness: array must have at least 3 elements');
+  }
 
   const avg = mean(arr);
   const sd = stddev(arr);

@@ -1,0 +1,40 @@
+# Development files
+test/
+tests/
+*.test.js
+*.spec.js
+
+# Old/backup files
+*.old.js
+*.bak
+
+# Git
+.git/
+.gitignore
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# Documentation source (keep compiled README.md)
+docs/
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Coverage
+coverage/
+.nyc_output/
+
+# Other
+.todo
+.env
