@@ -1,7 +1,7 @@
 {
-  "name": "stat-kit",
+  "name": "@mikyviz/stat-kit",
   "version": "1.0.0",
-  "description": "Набор базовых статистических функций: среднее, медиана, стандартное отклонение, корреляция и др.",
+  "description": "Lightweight statistics package: mean, median, standard deviation, correlation, outliers detection, and more",
   "main": "index.js",
   "keywords": [
     "statistics",

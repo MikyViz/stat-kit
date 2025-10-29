@@ -3,6 +3,7 @@ test/
 tests/
 *.test.js
 *.spec.js
+test-manual.js
 
 # Old/backup files
 *.old.js
