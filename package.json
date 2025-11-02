@@ -1,13 +1,15 @@
 {
   "name": "@mikyviz/stat-kit",
-  "version": "1.0.0",
-  "description": "Lightweight statistics package: mean, median, standard deviation, correlation, outliers detection, and more",
+  "version": "1.1.0",
+  "description": "Lightweight statistics package: mean, median, standard deviation, correlation, z-table, outliers detection, and more",
   "main": "index.js",
   "keywords": [
     "statistics",
     "math",
     "data",
     "z-score",
+    "z-table",
+    "normal-distribution",
     "correlation",
     "mean",
     "median",
@@ -16,7 +18,9 @@
     "outliers",
     "iqr",
     "data-analysis",
-    "stats"
+    "stats",
+    "percentile",
+    "confidence-interval"
   ],
   "author": "Michael David Vizenovsky",
   "license": "MIT",

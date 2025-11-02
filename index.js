@@ -7,6 +7,7 @@ const { sortByX, sortByY } = require('./src/sort');
 const skewness = require('./src/skewness');
 const findOutliers = require('./src/outliers');
 const range = require('./src/range');
+const { zToPercentile, percentileToZ, probabilityBetween, confidenceIntervalZ, zTable } = require('./src/ztable');
 
 module.exports = {
   mean,
@@ -18,5 +19,11 @@ module.exports = {
   sortByY,
   skewness,
   findOutliers,
-  ...range
+  ...range,
+  // Z-Table functions
+  zToPercentile,
+  percentileToZ,
+  probabilityBetween,
+  confidenceIntervalZ,
+  zTable
 };

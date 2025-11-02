@@ -14,7 +14,7 @@ npm install @mikyviz/stat-kit
 ## 🚀 Quick Start
 
 ```javascript
-const { mean, median, stddev, correlation, findOutliers } = require('@mikyviz/stat-kit');
+const { mean, median, stddev, correlation, findOutliers, zToPercentile } = require('@mikyviz/stat-kit');
 
 const data = [12, 15, 14, 10, 8, 12, 100];
 
@@ -22,6 +22,9 @@ console.log(mean(data));         // 24.43
 console.log(median(data));       // 12
 console.log(stddev(data));       // 32.77
 console.log(findOutliers(data)); // [100]
+
+// Z-table functions
+console.log(zToPercentile(1.96)); // 0.975 (97.5th percentile)
 ```
 
 ## 📐 API
@@ -68,6 +71,55 @@ Calculates Pearson correlation coefficient between two arrays (-1 to 1).
 const height = [150, 160, 165, 170, 180];
 const weight = [50, 60, 65, 70, 80];
 correlation(height, weight); // ~0.99 (strong positive correlation)
+```
+
+---
+
+### Z-Table (Standard Normal Distribution)
+
+#### `zToPercentile(z, usePrecise = true)`
+Converts a z-score to cumulative probability (percentile). Uses precise error function approximation by default.
+
+```javascript
+zToPercentile(0);      // 0.5 (50th percentile)
+zToPercentile(1.96);   // 0.975 (97.5th percentile)
+zToPercentile(-1.96);  // 0.025 (2.5th percentile)
+zToPercentile(2.576);  // 0.995 (99.5th percentile)
+```
+
+#### `percentileToZ(p)`
+Converts cumulative probability to z-score (inverse of zToPercentile).
+
+```javascript
+percentileToZ(0.5);    // 0 (median)
+percentileToZ(0.975);  // ~1.96
+percentileToZ(0.025);  // ~-1.96
+```
+
+#### `probabilityBetween(z1, z2)`
+Calculates the probability that a value falls between two z-scores.
+
+```javascript
+probabilityBetween(-1.96, 1.96);  // 0.95 (95% confidence interval)
+probabilityBetween(-1, 1);        // 0.6827 (68% within 1 SD)
+probabilityBetween(-2, 2);        // 0.9545 (95.45% within 2 SD)
+```
+
+#### `confidenceIntervalZ(confidenceLevel)`
+Returns the z-score for a given confidence level (two-tailed).
+
+```javascript
+confidenceIntervalZ(0.90);  // 1.645
+confidenceIntervalZ(0.95);  // 1.96
+confidenceIntervalZ(0.99);  // 2.576
+```
+
+#### `zTable`
+Direct access to the z-table lookup object for advanced usage.
+
+```javascript
+const { zTable } = require('@mikyviz/stat-kit');
+console.log(zTable['1.96']);  // 0.975
 ```
 
 ---
@@ -169,6 +221,22 @@ const examScores = [55, 60, 75, 85, 90];
 
 const corr = correlation(studyHours, examScores);
 console.log(`Correlation: ${corr.toFixed(2)}`); // ~0.99
+```
+
+### Calculating Confidence Intervals
+
+```javascript
+const { confidenceIntervalZ, zToPercentile, probabilityBetween } = require('@mikyviz/stat-kit');
+
+// Find z-score for 95% confidence interval
+const z95 = confidenceIntervalZ(0.95);
+console.log(`Z-score for 95% CI: ±${z95.toFixed(2)}`); // ±1.96
+
+// What percentile is a z-score of 1.5?
+console.log(`Z=1.5 is at ${(zToPercentile(1.5) * 100).toFixed(1)}th percentile`); // 93.3rd
+
+// Probability of being within 1 standard deviation
+console.log(`Probability within 1 SD: ${(probabilityBetween(-1, 1) * 100).toFixed(1)}%`); // 68.3%
 ```
 
 ---
