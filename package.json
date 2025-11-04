@@ -1,6 +1,6 @@
 {
   "name": "@mikyviz/stat-kit",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Lightweight statistics package: mean, median, standard deviation, correlation, z-table, outliers detection, and more",
   "main": "index.js",
   "keywords": [
@@ -20,7 +20,10 @@
     "data-analysis",
     "stats",
     "percentile",
-    "confidence-interval"
+    "confidence-interval",
+    "empirical-rule",
+    "quantile",
+    "sigma"
   ],
   "author": "Michael David Vizenovsky",
   "license": "MIT",
