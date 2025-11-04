@@ -1,4 +1,5 @@
 const { validate } = require('./utils');
+const quantile = require('./quantile');
 
 function basicRange(arr) {
   validate(arr, 'basicRange');
@@ -30,17 +31,6 @@ function stddevRange(arr, mean, stddev, k = 2) {
     lower: mean - k * stddev,
     upper: mean + k * stddev
   };
-}
-
-function quantile(sortedArr, q) {
-  const pos = (sortedArr.length - 1) * q;
-  const base = Math.floor(pos);
-  const rest = pos - base;
-  if (sortedArr[base + 1] !== undefined) {
-    return sortedArr[base] + rest * (sortedArr[base + 1] - sortedArr[base]);
-  } else {
-    return sortedArr[base];
-  }
 }
 
 module.exports = {

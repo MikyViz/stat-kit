@@ -14,14 +14,27 @@ npm install @mikyviz/stat-kit
 ## 🚀 Quick Start
 
 ```javascript
-const { mean, median, stddev, correlation, findOutliers, zToPercentile } = require('@mikyviz/stat-kit');
+const { 
+  mean, 
+  median, 
+  stddev, 
+  correlation, 
+  detectOutliersIQR,
+  detectOutliersSigma,
+  empiricalRule,
+  zToPercentile 
+} = require('@mikyviz/stat-kit');
 
 const data = [12, 15, 14, 10, 8, 12, 100];
 
-console.log(mean(data));         // 24.43
-console.log(median(data));       // 12
-console.log(stddev(data));       // 32.77
-console.log(findOutliers(data)); // [100]
+console.log(mean(data));                    // 24.43
+console.log(median(data));                  // 12
+console.log(stddev(data));                  // 32.77
+console.log(detectOutliersIQR(data));       // [100]
+console.log(detectOutliersSigma(data));     // [100]
+
+// Empirical Rule (68-95-99.7)
+console.log(empiricalRule(mean(data), stddev(data)));
 
 // Z-table functions
 console.log(zToPercentile(1.96)); // 0.975 (97.5th percentile)
@@ -51,6 +64,33 @@ Returns the standard deviation (measure of data spread).
 
 ```javascript
 stddev([2, 4, 4, 4, 5, 5, 7, 9]); // ~2.14
+```
+
+---
+
+### Empirical Rule (68-95-99.7 Rule)
+
+#### `empiricalRule(mean, stddev)`
+Returns intervals for the empirical rule in normal distributions:
+- **68%** of data falls within ±1σ (one standard deviation)
+- **95%** of data falls within ±2σ (two standard deviations)
+- **99.7%** of data falls within ±3σ (three standard deviations)
+
+```javascript
+const data = [10, 12, 14, 16, 18, 20];
+const m = mean(data);    // 15
+const s = stddev(data);  // ~3.42
+
+const intervals = empiricalRule(m, s);
+
+console.log(intervals);
+/*
+{
+  oneSigma: { lower: 11.58, upper: 18.42, coverage: 0.68 },
+  twoSigma: { lower: 8.16, upper: 21.84, coverage: 0.95 },
+  threeSigma: { lower: 4.74, upper: 25.26, coverage: 0.997 }
+}
+*/
 ```
 
 ---
@@ -124,14 +164,48 @@ console.log(zTable['1.96']);  // 0.975
 
 ---
 
-### Outliers
+### Outliers Detection
 
-#### `findOutliers(arr)`
-Returns an array of outliers using the IQR (Interquartile Range) method:
-- Outlier is a value beyond $ Q1 - 1.5 \cdot IQR $ or $ Q3 + 1.5 \cdot IQR $
+#### `detectOutliersIQR(arr)`
+Detects outliers using the **IQR (Interquartile Range) method**:
+- Outlier is any value beyond $ Q1 - 1.5 \cdot IQR $ or $ Q3 + 1.5 \cdot IQR $
+- Requires at least 4 data points
 
 ```javascript
-findOutliers([1, 2, 3, 4, 5, 100]); // [100]
+detectOutliersIQR([1, 2, 3, 4, 5, 100]); // [100]
+detectOutliersIQR([10, 12, 14, 16, 18, 50]); // [50]
+```
+
+#### `detectOutliersSigma(arr, threshold = 3)`
+Detects outliers using the **Empirical Rule (σ method)**:
+- Outlier is any value beyond $ \mu \pm k\sigma $ (default k=3)
+- More sensitive to extreme values than IQR
+- Requires at least 2 data points
+
+```javascript
+detectOutliersSigma([1, 2, 3, 4, 5, 100]);     // [100]
+detectOutliersSigma([1, 2, 3, 4, 5, 100], 2);  // [100] (more sensitive)
+```
+
+**When to use which method:**
+- **IQR method** (`detectOutliersIQR`): Robust to extreme values, good for skewed distributions
+- **Sigma method** (`detectOutliersSigma`): Better for normal distributions, customizable sensitivity
+
+---
+
+### Quantile Calculation
+
+#### `quantile(sortedArr, q)`
+Calculates the quantile for a **sorted** array.
+- `q = 0.25` → Q1 (first quartile)
+- `q = 0.5` → median
+- `q = 0.75` → Q3 (third quartile)
+
+```javascript
+const sorted = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+quantile(sorted, 0.25); // 2.5 (Q1)
+quantile(sorted, 0.5);  // 5 (median)
+quantile(sorted, 0.75); // 7.5 (Q3)
 ```
 
 ---
@@ -201,14 +275,26 @@ sortByX(points); // [{x:1, y:5}, {x:2, y:3}, {x:3, y:1}]
 ### Student Grades Analysis
 
 ```javascript
-const { mean, median, stddev, findOutliers } = require('@mikyviz/stat-kit');
+const { 
+  mean, 
+  median, 
+  stddev, 
+  detectOutliersIQR,
+  detectOutliersSigma,
+  empiricalRule 
+} = require('@mikyviz/stat-kit');
 
 const grades = [85, 90, 78, 92, 88, 76, 95, 30, 89];
 
 console.log(`Mean: ${mean(grades).toFixed(1)}`);              // 80.3
 console.log(`Median: ${median(grades)}`);                     // 88
 console.log(`Standard Deviation: ${stddev(grades).toFixed(1)}`); // 19.3
-console.log(`Outliers: ${findOutliers(grades)}`);            // [30]
+console.log(`Outliers (IQR): ${detectOutliersIQR(grades)}`);  // [30]
+console.log(`Outliers (3σ): ${detectOutliersSigma(grades)}`); // [30]
+
+// Expected grade ranges
+const intervals = empiricalRule(mean(grades), stddev(grades));
+console.log(`68% of students scored between ${intervals.oneSigma.lower.toFixed(1)} and ${intervals.oneSigma.upper.toFixed(1)}`);
 ```
 
 ### Correlation Between Variables
@@ -221,6 +307,55 @@ const examScores = [55, 60, 75, 85, 90];
 
 const corr = correlation(studyHours, examScores);
 console.log(`Correlation: ${corr.toFixed(2)}`); // ~0.99
+```
+
+### Comparing Outlier Detection Methods
+
+```javascript
+const { 
+  detectOutliersIQR, 
+  detectOutliersSigma,
+  mean,
+  stddev 
+} = require('@mikyviz/stat-kit');
+
+const measurements = [98, 100, 102, 99, 101, 98, 100, 99, 150, 2];
+
+console.log('Data:', measurements);
+console.log(`Mean: ${mean(measurements).toFixed(1)}`);
+console.log(`Std Dev: ${stddev(measurements).toFixed(1)}`);
+
+// IQR method - robust to extremes
+const iqrOutliers = detectOutliersIQR(measurements);
+console.log(`IQR Outliers: ${iqrOutliers}`); // [150, 2]
+
+// Sigma method with default threshold (3σ)
+const sigmaOutliers3 = detectOutliersSigma(measurements, 3);
+console.log(`3σ Outliers: ${sigmaOutliers3}`); // [150, 2]
+
+// Sigma method with stricter threshold (2σ)
+const sigmaOutliers2 = detectOutliersSigma(measurements, 2);
+console.log(`2σ Outliers: ${sigmaOutliers2}`); // [150, 2] (more sensitive)
+```
+
+### Using Empirical Rule for Quality Control
+
+```javascript
+const { empiricalRule, mean, stddev } = require('@mikyviz/stat-kit');
+
+// Manufacturing part dimensions (in mm)
+const dimensions = [50.1, 50.0, 49.9, 50.2, 50.1, 49.8, 50.0, 50.1];
+
+const m = mean(dimensions);
+const s = stddev(dimensions);
+
+const ranges = empiricalRule(m, s);
+
+console.log('Quality Control Ranges:');
+console.log(`Target: ${m.toFixed(2)} mm`);
+console.log(`Warning range (±1σ, 68%): ${ranges.oneSigma.lower.toFixed(2)} - ${ranges.oneSigma.upper.toFixed(2)} mm`);
+console.log(`Action range (±2σ, 95%): ${ranges.twoSigma.lower.toFixed(2)} - ${ranges.twoSigma.upper.toFixed(2)} mm`);
+console.log(`Reject range (±3σ, 99.7%): ${ranges.threeSigma.lower.toFixed(2)} - ${ranges.threeSigma.upper.toFixed(2)} mm`);
 ```
 
 ### Calculating Confidence Intervals
@@ -243,7 +378,7 @@ console.log(`Probability within 1 SD: ${(probabilityBetween(-1, 1) * 100).toFixe
 
 ## 📄 License
 
-MIT © Michael & Copilot
+MIT © Michael David Vizenovsky
 
 ## 🔗 Links
 
