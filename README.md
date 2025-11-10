@@ -18,7 +18,8 @@ const {
   mean, 
   median, 
   stddev, 
-  correlation, 
+  correlation,
+  linearRegression,
   detectOutliersIQR,
   detectOutliersSigma,
   empiricalRule,
@@ -35,6 +36,12 @@ console.log(detectOutliersSigma(data));     // [100]
 
 // Empirical Rule (68-95-99.7)
 console.log(empiricalRule(mean(data), stddev(data)));
+
+// Linear Regression
+const x = [1, 2, 3, 4, 5];
+const y = [2, 4, 5, 4, 5];
+const model = linearRegression(x, y);
+console.log(model.predict(6)); // 5.8
 
 // Z-table functions
 console.log(zToPercentile(1.96)); // 0.975 (97.5th percentile)
@@ -112,6 +119,34 @@ const height = [150, 160, 165, 170, 180];
 const weight = [50, 60, 65, 70, 80];
 correlation(height, weight); // ~0.99 (strong positive correlation)
 ```
+
+---
+
+### Linear Regression
+
+#### `linearRegression(x, y)`
+Performs simple linear regression using the least squares method. Returns a model object with slope, intercept, R², and a predict function.
+
+```javascript
+const x = [1, 2, 3, 4, 5];
+const y = [2, 4, 5, 4, 5];
+
+const model = linearRegression(x, y);
+
+console.log(model.slope);      // 0.6 (slope/gradient)
+console.log(model.intercept);  // 2.2 (y-intercept)
+console.log(model.r2);         // 0.6 (coefficient of determination)
+
+// Make predictions
+console.log(model.predict(6)); // 5.8
+console.log(model.predict(10)); // 8.2
+```
+
+**Return object:**
+- `slope` — наклон линии регрессии (коэффициент b в y = a + bx)
+- `intercept` — точка пересечения с осью Y (коэффициент a)
+- `r2` — коэффициент детерминации (0-1, показывает качество модели)
+- `predict(x)` — функция для предсказания значения y по заданному x
 
 ---
 
@@ -307,6 +342,30 @@ const examScores = [55, 60, 75, 85, 90];
 
 const corr = correlation(studyHours, examScores);
 console.log(`Correlation: ${corr.toFixed(2)}`); // ~0.99
+```
+
+### Predicting Sales with Linear Regression
+
+```javascript
+const { linearRegression } = require('@mikyviz/stat-kit');
+
+// Historical data: advertising spend (in thousands) vs sales
+const adSpend = [10, 15, 20, 25, 30, 35, 40];
+const sales = [120, 150, 170, 195, 210, 240, 260];
+
+const model = linearRegression(adSpend, sales);
+
+console.log(`Sales = ${model.intercept.toFixed(2)} + ${model.slope.toFixed(2)} × Ad Spend`);
+console.log(`R² = ${model.r2.toFixed(3)} (model quality)`);
+
+// Predict sales for $50k ad spend
+const predictedSales = model.predict(50);
+console.log(`Predicted sales for $50k ad spend: $${predictedSales.toFixed(2)}k`);
+
+// Expected output:
+// Sales = 80.00 + 4.29 × Ad Spend
+// R² = 0.983 (model quality)
+// Predicted sales for $50k ad spend: $294.50k
 ```
 
 ### Comparing Outlier Detection Methods

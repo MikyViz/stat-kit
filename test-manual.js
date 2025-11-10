@@ -17,7 +17,8 @@ const {
   sortByY,
   quantile,
   zToPercentile,
-  percentileToZ
+  percentileToZ,
+  linearRegression
 } = require('./index');
 
 console.log('🧪 Тестирование stat-kit...\n');
@@ -98,6 +99,17 @@ try {
   console.log('sortByY:', sortByY(points));
   console.log('');
 
+  // Линейная регрессия
+  console.log('📉 Линейная регрессия:');
+  const xRegr = [1, 2, 3, 4, 5];
+  const yRegr = [2, 4, 5, 4, 5];
+  const model = linearRegression(xRegr, yRegr);
+  console.log('Наклон (slope):', model.slope.toFixed(3));
+  console.log('Пересечение (intercept):', model.intercept.toFixed(3));
+  console.log('R² (коэффициент детерминации):', model.r2.toFixed(3));
+  console.log('Предсказание для x=6:', model.predict(6).toFixed(3));
+  console.log('');
+
   // Тест валидации
   console.log('✅ Тест валидации (должны быть ошибки):');
   try {
@@ -134,6 +146,12 @@ try {
     detectOutliersSigma([1]);
   } catch (e) {
     console.log('✓ detectOutliersSigma с < 2 элементами выбросил ошибку:', e.message);
+  }
+
+  try {
+    linearRegression([1], [2]);
+  } catch (e) {
+    console.log('✓ linearRegression с < 2 элементами выбросил ошибку:', e.message);
   }
 
   console.log('\n✅ Все тесты пройдены успешно!');
