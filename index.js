@@ -10,7 +10,7 @@ const range = require('./src/range');
 const { zToPercentile, percentileToZ, probabilityBetween, confidenceIntervalZ, zTable } = require('./src/ztable');
 const empiricalRule = require('./src/empiricalRule');
 const quantile = require('./src/quantile');
-const linearRegression = require('./src/linearRegression');
+const { linearRegression, getLinearCoefficients, getSlopeFromCorrelation } = require('./src/linearRegression');
 
 module.exports = {
   mean,
@@ -34,5 +34,7 @@ module.exports = {
   // Quantile function
   quantile,
   // Linear Regression
-  linearRegression
+  linearRegression,
+  getLinearCoefficients,
+  getSlopeFromCorrelation
 };

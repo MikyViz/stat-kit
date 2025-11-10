@@ -18,7 +18,9 @@ const {
   quantile,
   zToPercentile,
   percentileToZ,
-  linearRegression
+  linearRegression,
+  getLinearCoefficients,
+  getSlopeFromCorrelation
 } = require('./index');
 
 console.log('🧪 Тестирование stat-kit...\n');
@@ -108,6 +110,17 @@ try {
   console.log('Пересечение (intercept):', model.intercept.toFixed(3));
   console.log('R² (коэффициент детерминации):', model.r2.toFixed(3));
   console.log('Предсказание для x=6:', model.predict(6).toFixed(3));
+  
+  // Упрощенный вариант
+  const coeffs = getLinearCoefficients(xRegr, yRegr);
+  console.log('getLinearCoefficients:', `slope=${coeffs.slope.toFixed(3)}, intercept=${coeffs.intercept.toFixed(3)}`);
+  
+  // Наклон из корреляции
+  const r = correlation(xRegr, yRegr);
+  const sx = stddev(xRegr);
+  const sy = stddev(yRegr);
+  const slopeFromCorr = getSlopeFromCorrelation(r, sx, sy);
+  console.log('getSlopeFromCorrelation:', slopeFromCorr.toFixed(3));
   console.log('');
 
   // Тест валидации
@@ -152,6 +165,18 @@ try {
     linearRegression([1], [2]);
   } catch (e) {
     console.log('✓ linearRegression с < 2 элементами выбросил ошибку:', e.message);
+  }
+
+  try {
+    getLinearCoefficients([1], [2]);
+  } catch (e) {
+    console.log('✓ getLinearCoefficients с < 2 элементами выбросил ошибку:', e.message);
+  }
+
+  try {
+    getSlopeFromCorrelation('not a number', 1, 1);
+  } catch (e) {
+    console.log('✓ getSlopeFromCorrelation с невалидными данными выбросил ошибку:', e.message);
   }
 
   console.log('\n✅ Все тесты пройдены успешно!');

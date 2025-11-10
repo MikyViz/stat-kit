@@ -148,6 +148,35 @@ console.log(model.predict(10)); // 8.2
 - `r2` — коэффициент детерминации (0-1, показывает качество модели)
 - `predict(x)` — функция для предсказания значения y по заданному x
 
+#### `getLinearCoefficients(x, y)`
+Simplified version of linearRegression that returns only slope and intercept (without R² calculation).
+
+```javascript
+const x = [1, 2, 3, 4, 5];
+const y = [2, 4, 5, 4, 5];
+
+const { slope, intercept } = getLinearCoefficients(x, y);
+console.log(`y = ${intercept.toFixed(2)} + ${slope.toFixed(2)}x`);
+// y = 2.20 + 0.60x
+```
+
+#### `getSlopeFromCorrelation(r, sx, sy)`
+Calculates regression slope from correlation coefficient and standard deviations.
+
+```javascript
+const x = [1, 2, 3, 4, 5];
+const y = [2, 4, 5, 4, 5];
+
+const r = correlation(x, y);
+const sx = stddev(x);
+const sy = stddev(y);
+
+const slope = getSlopeFromCorrelation(r, sx, sy);
+console.log(slope); // 0.6
+```
+
+**Formula:** `slope = r × (sy / sx)`
+
 ---
 
 ### Z-Table (Standard Normal Distribution)
