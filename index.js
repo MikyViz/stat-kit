@@ -2,6 +2,7 @@ const mean = require('./src/mean');
 const median = require('./src/median');
 const stddev = require('./src/stddev');
 const zScores = require('./src/zscore');
+const { zTransform } = require('./src/zscore');
 const correlation = require('./src/correlation');
 const { sortByX, sortByY } = require('./src/sort');
 const skewness = require('./src/skewness');
@@ -11,6 +12,7 @@ const { zToPercentile, percentileToZ, probabilityBetween, confidenceIntervalZ, z
 const empiricalRule = require('./src/empiricalRule');
 const quantile = require('./src/quantile');
 const { linearRegression, getLinearCoefficients, getSlopeFromCorrelation } = require('./src/linearRegression');
+const transformStats = require('./src/transformStats');
 
 module.exports = {
   mean,
@@ -18,6 +20,7 @@ module.exports = {
   stddev,
   empiricalRule,
   zScores,
+  zTransform,
   correlation,
   sortByX,
   sortByY,
@@ -36,5 +39,7 @@ module.exports = {
   // Linear Regression
   linearRegression,
   getLinearCoefficients,
-  getSlopeFromCorrelation
+  getSlopeFromCorrelation,
+  // Transform Statistics
+  transformStats
 };

@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- `transformStats(stats, transform)` - Transform statistics using linear transformation (Y = scale * X + shift)
+  - Applies shift and scale transformations to mean, standard deviation, and variance
+  - Useful for unit conversions (e.g., Celsius to Fahrenheit) while preserving statistical properties
+- `zTransform(x, mean, stddev)` - Calculate z-score for a single value with given mean and standard deviation
+
 ## [1.0.0] - 2025-10-29
 
 ### Added
